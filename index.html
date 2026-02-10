@@ -211,6 +211,22 @@
             40% {transform: translateY(-10px) translateX(-50%);}
             60% {transform: translateY(-5px) translateX(-50%);}
         }
+        /* ----------------------------------------------
+        # HERO IMAGE
+        ---------------------------------------------- */
+        .hero-img {
+            border-radius: 15px; /* Twoje wymagane zaokrąglenie */
+            box-shadow: 0 0 30px rgba(169, 226, 38, 0.15); /* Subtelna limonkowa poświata */
+            border: 1px solid rgba(169, 226, 38, 0.2); /* Delikatna ramka */
+            max-height: 600px; /* Ograniczenie wysokości, żeby nie zajęło całego ekranu */
+            width: 100%;
+            object-fit: cover; /* Ładne dopasowanie zdjęcia */
+            transition: transform 0.3s ease;
+        }
+
+        .hero-img:hover {
+            transform: scale(1.02); /* Lekki efekt powiększenia po najechaniu */
+        }
 
         /* ----------------------------------------------
         # GLASS CARDS
@@ -442,11 +458,11 @@
     <header id="hero">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-8" data-aos="fade-right">
+                <div class="col-lg-6" data-aos="fade-right">
                     <div class="hero-content">
                         <p class="text-uppercase hero-label mb-2">Portfolio</p>
                         <h1>Jan <span class="hero-accent">Galewicz</span></h1>
-                        <p class="lead mb-4 text-light" style="max-width: 600px;">
+                        <p class="lead mb-4 text-light">
                             Specjalista ds. Marketingu i Social Media. 
                             Łączę kreatywność z analitycznym podejściem, budując zasięgi, które mają znaczenie.
                         </p>
@@ -456,6 +472,8 @@
                         </div>
                     </div>
                 </div>
+
+                
             </div>
         </div>
         
@@ -616,14 +634,24 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-                        <div class="tech-item">
-                            <i class="bi bi-phone tech-icon"></i>
-                            <div>
-                                <h5 class="m-0 text-white">UI/UX Basics</h5>
-                                <small class="text-muted">Prototypowanie</small>
-                            </div>
-                        </div>
-                    </div>
+    <div class="tech-item">
+        <i class="bi bi-phone tech-icon"></i>
+        <div>
+            <h5 class="m-0 text-white">UI/UX Basics</h5>
+            <small class="text-muted">Prototypowanie</small>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="350">
+    <div class="tech-item">
+        <i class="bi bi-bar-chart-fill tech-icon"></i>
+        <div>
+            <h5 class="m-0 text-white">Power BI</h5>
+            <small class="text-muted">Analiza danych</small>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
