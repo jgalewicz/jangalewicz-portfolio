@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio Jana Galewicza – specjalista ds. marketingu i social media. Content, grafika, analiza danych, Figma. / Portfolio of Jan Galewicz – marketing and social media specialist.">
+    <meta name="theme-color" content="#121212">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jan Galewicz – Marketing & Social Media">
+    <meta property="og:description" content="Portfolio: social media, grafika, analiza danych, projekty UI/UX.">
     <link rel="icon" type="image/png" href="img/jg.png">
     <title>Jan Galewicz - Specjalista ds. Marketingu i Social Media</title>
 
@@ -321,44 +326,124 @@
         /* ----------------------------------------------
         # PROJEKTY
         ---------------------------------------------- */
-        .project-card {
-            background-color: var(--app-dark-secondary);
-            border-radius: 15px;
-            overflow: hidden;
+        .proj-masonry {
+            column-count: 3;
+            column-gap: 1.25rem;
+        }
+
+        .proj-tile {
             position: relative;
+            display: block;
+            margin-bottom: 1.25rem;
+            break-inside: avoid;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e1e1e, #272727);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: border-color 0.3s ease;
+        }
+
+        /* proporcje pustych kafelków (po dodaniu zdjęcia wysokość dopasuje się sama) */
+        .proj-tile.r-wide { aspect-ratio: 16 / 10; }
+        .proj-tile.r-sq   { aspect-ratio: 1 / 1; }
+        .proj-tile.r-tall { aspect-ratio: 4 / 5; }
+        .proj-tile:has(> img) { aspect-ratio: auto; }
+
+        .proj-tile img {
+            display: block;
+            width: 100%;
             height: 100%;
-            border: none;
-            transition: transform 0.4s ease;
+            object-fit: cover;
         }
 
-        .project-card:hover {
-            transform: translateY(-8px);
-        }
+        .proj-tile img ~ .proj-tile-ph { display: none; }
 
-        .project-img-wrapper {
-            height: 250px;
-            background-color: #252525;
+        .proj-tile-ph {
+            position: absolute;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: #444;
-            transition: 0.3s;
-        }
-        
-        .project-card:hover .project-img-wrapper {
-            color: var(--app-accent);
-            background-color: #2a2a2a;
+            font-size: 2.5rem;
+            color: #3a3a3a;
         }
 
-        .project-featured .project-img-wrapper {
-            height: 400px;
+        .proj-tile-name {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(18, 18, 18, 0.78);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .project-overlay {
-            padding: 1.5rem;
-            background: var(--app-dark-secondary);
-            border-top: 1px solid rgba(255,255,255,0.05);
+        .proj-tile:hover {
+            border-color: var(--app-accent);
+        }
+
+        .proj-tile:hover .proj-tile-name {
+            opacity: 1;
+        }
+
+        /* ekrany dotykowe nie mają hover - nazwa zawsze widoczna u dołu kafelka */
+        @media (hover: none) {
+            .proj-tile-name {
+                opacity: 1;
+                inset: auto 0 0 0;
+                justify-content: flex-start;
+                padding-top: 2.5rem;
+                font-size: 0.9rem;
+                background: linear-gradient(to top, rgba(18,18,18,0.85), transparent);
+            }
+        }
+
+        .proj-side .section-header {
+            margin-bottom: 1rem;
+        }
+
+        .proj-side {
+            position: relative;
+            z-index: 3;
+        }
+
+        .proj-side .section-header h2 {
+            font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+            overflow-wrap: anywhere;
+            color: #fff;
+        }
+
+        .proj-side-sub {
+            color: var(--app-grey);
+            font-size: 1.15rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        @media (min-width: 992px) {
+            .proj-side {
+                position: sticky;
+                top: 110px;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .proj-masonry { column-count: 2; }
+            .proj-side { margin-bottom: 2rem; }
+            .proj-side .section-header h2 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 575.98px) {
+            .proj-masonry { column-count: 1; }
         }
 
         /* ----------------------------------------------
@@ -417,9 +502,84 @@
             color: var(--app-accent);
         }
 
+        /* ----------------------------------------------
+        # ULEPSZENIA: UX, dostępność, pasek postępu, przycisk "do góry"
+        ---------------------------------------------- */
+        section[id] { scroll-margin-top: 70px; }
+
+        :focus-visible {
+            outline: 2px solid var(--app-accent);
+            outline-offset: 3px;
+        }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: var(--app-accent);
+            z-index: 2000;
+        }
+
+        #to-top {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            width: 46px;
+            height: 46px;
+            border: none;
+            border-radius: 50%;
+            background: var(--app-accent);
+            color: var(--app-dark);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: 0.3s ease;
+            z-index: 1500;
+        }
+
+        #to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #contact-form { position: relative; }
+
+        /* komunikat pod formularzem nie zmienia jego wysokości (formularz zostaje wyrównany do tekstu po lewej) */
+        #form-status {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 0.75rem);
+        }
+
+        @media (max-width: 991.98px) {
+            #form-status {
+                position: static;
+                margin-top: 1rem;
+            }
+        }
+        #form-status.ok { color: var(--app-accent); }
+        #form-status.err { color: #ff6b6b; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
     </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="100" data-bs-theme="dark">
+    <div id="scroll-progress"></div>
 
     <canvas id="constellation-bg"></canvas>
 
@@ -443,12 +603,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="#about">O Mnie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#experience">Doświadczenie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#tools">Kompetencje</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Projekty</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about" data-i18n="nav.about">O Mnie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="nav.projects">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="nav.experience">Doświadczenie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tools" data-i18n="nav.skills">Kompetencje</a></li>
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-primary btn-sm px-4 rounded-pill" href="#contact">Kontakt</a>
+                        <a class="btn btn-outline-primary btn-sm px-4 rounded-pill" href="#contact"><span data-i18n="nav.contact">Kontakt</span></a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <button id="lang-toggle" type="button" class="btn btn-outline-light btn-sm px-3 rounded-pill" aria-label="Change language / Zmień język">EN</button>
                     </li>
                 </ul>
             </div>
@@ -463,12 +626,11 @@
                         <p class="text-uppercase hero-label mb-2">Portfolio</p>
                         <h1>Jan <span class="hero-accent">Galewicz</span></h1>
                         <p class="lead mb-4 text-light">
-                            Specjalista ds. Marketingu i Social Media. 
-                            Łączę kreatywność z analitycznym podejściem, budując zasięgi, które mają znaczenie.
+                            <span data-i18n-html="hero.lead">Marketing cyfrowy, dane i design w jednym miejscu. Łączę kreatywność z analizą, żeby komunikacja nie tylko dobrze wyglądała, ale też <span class="text-primary fw-bold">działała</span>.</span>
                         </p>
                         <div class="d-flex gap-3">
-                            <a href="#projects" class="btn btn-primary">Zobacz Prace</a>
-                            <a href="#contact" class="btn btn-outline-light rounded-pill px-4">Kontakt</a>
+                            <a href="#projects" class="btn btn-primary"><span data-i18n="hero.work">Zobacz Prace</span></a>
+                            <a href="#contact" class="btn btn-outline-light rounded-pill px-4"><span data-i18n="nav.contact">Kontakt</span></a>
                         </div>
                     </div>
                 </div>
@@ -488,52 +650,52 @@
                 <div class="glass-card" data-aos="fade-up">
                     <div class="row align-items-center">
                         <div class="col-lg-5 mb-4 mb-lg-0 border-end border-secondary pe-lg-5">
-                            <h2 class="display-4 fw-bold mb-3">O Mnie</h2>
-                            <p class="text-muted">Absolwent Zarządzania ze specjalnością Digital Marketing na Uniwersytecie Civitas.</p>
+                            <h2 class="display-4 fw-bold mb-3" data-i18n="about.title">O Mnie</h2>
+                            <p class="text-muted"><span data-i18n="about.degree">Absolwent Zarządzania ze specjalnością Digital Marketing na Uniwersytecie Civitas.</span></p>
                             <div class="mt-4">
-                                <h5 class="text-white mb-3">Pasje:</h5>
+                                <h5 class="text-white mb-3"><span data-i18n="about.interests">Pasje:</span></h5>
                                 <div class="d-flex gap-3 fs-4">
-                                    <i class="bi bi-controller passion-icon" title="Gry/Technologia"></i>
-                                    <i class="bi bi-airplane passion-icon" title="Podróże"></i>
-                                    <i class="bi bi-camera-reels passion-icon" title="Kino"></i>
-                                    <i class="bi bi-bicycle passion-icon" title="Sport"></i>
+                                    <i class="bi bi-controller passion-icon" title="Gry/Technologia" data-i18n-title="about.i1"></i>
+                                    <i class="bi bi-airplane passion-icon" title="Podróże" data-i18n-title="about.i2"></i>
+                                    <i class="bi bi-camera-reels passion-icon" title="Kino" data-i18n-title="about.i3"></i>
+                                    <i class="bi bi-bicycle passion-icon" title="Sport" data-i18n-title="about.i4"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-7 ps-lg-5">
                             <p class="lead mb-4 text-light">
-                                Mam doświadczenie agencyjne w domu mediowym oraz duże doświadczenie w sprzedaży, które nauczyło mnie skutecznego budowania relacji z klientami. 
-                                <span class="hero-accent fw-bold">Obecnie rozwijam media społecznościowe klubu KS Witolin Warszawa.</span>
+                                <span data-i18n="about.exp">Mam doświadczenie agencyjne w domu mediowym oraz duże doświadczenie w sprzedaży, które nauczyło mnie skutecznego budowania relacji z klientami.</span> 
+                                <span class="hero-accent fw-bold"><span data-i18n="about.now">Obecnie rozwijam media społecznościowe klubu KS Witolin Warszawa.</span></span>
                             </p>
                             <div class="row g-3 text-muted">
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="bi bi-check-circle-fill text-primary"></i>
-                                        <span>Myślę analitycznie i wyciągam
-wnioski z danych liczbowych</span>
+                                        <span><span data-i18n="about.t1">Myślę analitycznie i wyciągam
+wnioski z danych liczbowych</span></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="bi bi-check-circle-fill text-primary"></i>
-                                        <span>Podchodzę z zaangażowaniem do
+                                        <span><span data-i18n="about.t2">Podchodzę z zaangażowaniem do
 powierzonych mi zadań oraz biorę za
-nie odpowiedzialność.</span>
+nie odpowiedzialność.</span></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="bi bi-check-circle-fill text-primary"></i>
-                                        <span>Potrafię radzić sobie w stresujących
-sytuacjach</span>
+                                        <span><span data-i18n="about.t3">Potrafię radzić sobie w stresujących
+sytuacjach</span></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="bi bi-check-circle-fill text-primary"></i>
-                                        <span>Jestem otwarty na nowe wyzwania i
+                                        <span><span data-i18n="about.t4">Jestem otwarty na nowe wyzwania i
 mam zdolność szybkiego
-przyswajania wiedzy.</span>
+przyswajania wiedzy.</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -543,15 +705,85 @@ przyswajania wiedzy.</span>
             </div>
         </section>
 
+        <section id="projects">
+            <div class="container">
+                <div class="row g-4 g-lg-5">
+
+                    <div class="col-lg-3">
+                        <div class="proj-side">
+                            <div class="section-header">
+                                <h2 data-i18n-html="proj.title">Portfolio</h2>
+                            </div>
+                            <p class="proj-side-sub" data-i18n="proj.sub">Grafiki i projekty, nad którymi pracowałem.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9">
+                <!--
+                    JAK DODAĆ ZDJĘCIE DO KAFELKA:
+                    1) wstaw <img src="img/twoj-plik.jpg" alt="NAZWA"> jako PIERWSZY element w kafelku,
+                    2) zmień tekst NAZWA na nazwę projektu.
+                    Kafelek sam dopasuje wysokość do zdjęcia (ikonka-zaślepka zniknie).
+                    Kafelki kopiujesz / usuwasz w całości (od <div class="proj-tile"> do </div>).
+                -->
+                <div class="proj-masonry">
+                    <div class="proj-tile r-wide">
+                        <img src="img/SGH2006RA.jpg" alt="AZ AURUM">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">AZ AURUM</span>
+                    </div>
+                    <div class="proj-tile r-tall">
+                        <img src="img/IMG_0621.jpeg" alt="WITOLIN WARSZAWA">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">WITOLIN WARSZAWA</span>
+                    </div>
+                    <div class="proj-tile r-tall">
+                        <img src="img/IMG_0625.jpeg" alt="WITOLIN WARSZAWA">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">WITOLIN WARSZAWA</span>
+                    </div>
+                        <div class="proj-tile r-tall">
+                        <img src="img/dressify.png" alt="DRESSIFY">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">DRESSIFY</span>
+                    </div>
+                    <div class="proj-tile r-tall">
+                        <img src="img/IMG_0624.jpeg" alt="WITOLIN WARSZAWA">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">WITOLIN WARSZAWA</span>
+                    </div>
+                
+                    <div class="proj-tile r-sq">
+                        <img src="img/IMG_0626.jpeg" alt="WITOLIN WARSZAWA">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">WITOLIN WARSZAWA</span>
+                    </div>
+                     <div class="proj-tile r-wide">
+                        <img src="img/NB5.png" alt="NEUBIE">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">NEUBIE</span>
+                    </div>
+                    <div class="proj-tile r-wide">
+                        <img src="img/dressify2.png" alt="DRESSIFY">
+                        <i class="bi bi-image proj-tile-ph"></i>
+                        <span class="proj-tile-name">DRESSIFY</span>
+                    </div>
+                </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
         <section id="experience">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 mb-5" data-aos="fade-right">
                         <div class="section-header">
-                            <h2>Ścieżka<br>Kariery</h2>
-                            <p class="text-muted">Moje doświadczenie zawodowe rok po roku.</p>
+                            <h2 data-i18n-html="exp.title">Ścieżka<br>Kariery</h2>
+                            <p class="text-muted"><span data-i18n="exp.sub">Moje doświadczenie zawodowe rok po roku.</span></p>
                         </div>
-                        <a href="files/_CV_JanGalewicz.pdf" class="btn btn-outline-light rounded-pill" target="_blank"><i class="bi bi-download me-2"></i>Pobierz CV</a>
+                        <a id="cv-link" href="files/_CV_JanGalewicz.pdf" class="btn btn-outline-light rounded-pill" target="_blank"><i class="bi bi-download me-2"></i><span data-i18n="exp.cv">Pobierz CV</span></a>
                     </div>
                     <div class="col-lg-8">
                         <div class="timeline">
@@ -561,42 +793,42 @@ przyswajania wiedzy.</span>
                                 <h3 class="h4 text-white">Client Leadership Junior Specialist</h3>
                                 <p class="mb-2 hero-accent fw-bold">WPP Media</p>
                                 <div class="text-muted">
-                                    <p class="mb-1">Wsparcie zespołu w optymalizacji planów i kontakcie z domami mediowymi/wydawcami</p> 
-                                    <p class="mb-1">Przygotowywanie cyklicznych raportów o nowych kreacjach i strategii konkurencji</p>   
-                                    <p class="mb-1">Opracowywanie raportów post-buy i weryfikacja KPI</p>
+                                    <p class="mb-1"><span data-i18n="exp.1a">Wsparcie zespołu w optymalizacji planów i kontakcie z domami mediowymi/wydawcami</span></p> 
+                                    <p class="mb-1"><span data-i18n="exp.1b">Przygotowywanie cyklicznych raportów o nowych kreacjach i strategii konkurencji</span></p>   
+                                    <p class="mb-1"><span data-i18n="exp.1c">Opracowywanie raportów post-buy i weryfikacja KPI</span></p>
                                 </div>
                             </div>
                             
                             <div class="timeline-item" data-aos="fade-left" data-aos-delay="100">
-                                <span class="timeline-date">07/2025 – Obecnie</span>
-                                <h3 class="h4 text-white">Specjalista ds. social media</h3>
+                                <span class="timeline-date"><span data-i18n="exp.2date">07/2025 – Obecnie</span></span>
+                                <h3 class="h4 text-white"><span data-i18n="exp.2title">Specjalista ds. social media</span></h3>
                                 <p class="mb-2 hero-accent fw-bold">KS Witolin Warszawa</p>
                                 <div class="text-muted">
-                                    <p class="mb-1">Kompleksowe zarządzanie wizerunkiem klubu</p> 
-                                    <p class="mb-1">Tworzenie contentu wideo i graficznego</p>   
-                                    <p class="mb-1">Harmonogramowanie postów w Meta Business Suite</p>
+                                    <p class="mb-1"><span data-i18n="exp.2a">Kompleksowe zarządzanie wizerunkiem klubu</span></p> 
+                                    <p class="mb-1"><span data-i18n="exp.2b">Tworzenie contentu wideo i graficznego</span></p>   
+                                    <p class="mb-1"><span data-i18n="exp.2c">Harmonogramowanie postów w Meta Business Suite</span></p>
                                 </div>
                             </div>
 
                             <div class="timeline-item" data-aos="fade-left" data-aos-delay="200">
                                 <span class="timeline-date">04/2023 – 03/2026</span>
-                                <h3 class="h4 text-white">Specjalista ds. sprzedaży</h3>
+                                <h3 class="h4 text-white"><span data-i18n="exp.3title">Specjalista ds. sprzedaży</span></h3>
                                 <p class="mb-2 hero-accent fw-bold">R-GOL.com</p>
                                 <div class="text-muted">
-                                    <p class="mb-1">Aktywna obsługa klienta</p>
-                                    <p class="mb-1">Realizacja targetów sprzedażowych</p>
-                                    <p class="mb-1">Projektowanie nadruków odzieżowych w Corel Draw</p>
+                                    <p class="mb-1"><span data-i18n="exp.3a">Aktywna obsługa klienta</span></p>
+                                    <p class="mb-1"><span data-i18n="exp.3b">Realizacja targetów sprzedażowych</span></p>
+                                    <p class="mb-1"><span data-i18n="exp.3c">Projektowanie nadruków odzieżowych w Corel Draw</span></p>
                                 </div>
                             </div>
 
                             <div class="timeline-item" data-aos="fade-left" data-aos-delay="300">
                                 <span class="timeline-date">08/2021 – 11/2021</span>
-                                <h3 class="h4 text-white">Asystent ds. contentu</h3>
+                                <h3 class="h4 text-white"><span data-i18n="exp.4title">Asystent ds. contentu</span></h3>
                                 <p class="mb-2 hero-accent fw-bold">AZ Aurum</p>
                                 <div class="text-muted">
-                                <p>Tworzenie kart produktowych (Excel)</p>
-                                    <p>Obróbka zdjęć (Photoshop)</p>
-                                    <p>Współpraca z działem marketingu</p>
+                                <p><span data-i18n="exp.4a">Tworzenie kart produktowych (Excel)</span></p>
+                                    <p><span data-i18n="exp.4b">Obróbka zdjęć (Photoshop)</span></p>
+                                    <p><span data-i18n="exp.4c">Współpraca z działem marketingu</span></p>
                                     </div>
                             </div>
 
@@ -608,8 +840,8 @@ przyswajania wiedzy.</span>
         <section id="certificates">
             <div class="container">
                 <div class="section-header" data-aos="fade-right">
-                    <h2>Certyfikaty</h2>
-                    <p class="text-muted">Dokumenty potwierdzające moje umiejętności i ukończone kursy.</p>
+                    <h2><span data-i18n="cert.title">Certyfikaty</span></h2>
+                    <p class="text-muted"><span data-i18n="cert.sub">Dokumenty potwierdzające moje umiejętności i ukończone kursy.</span></p>
                 </div>
                 
                 <div class="row g-4">
@@ -618,10 +850,10 @@ przyswajania wiedzy.</span>
                             <div>
                                 <i class="bi bi-bar-chart-fill display-4 text-primary mb-3 d-block"></i>
                                 <h4 class="h5 text-white mb-2">Microsoft Power BI</h4>
-                                <p class="text-muted small mb-4">Ukończony kurs Santander Open Academy z zakresu analizy danych i tworzenia wizualizacji w środowisku Power BI.</p>
+                                <p class="text-muted small mb-4"><span data-i18n="cert.pbi">Ukończony kurs Santander Open Academy z zakresu analizy danych i tworzenia wizualizacji w środowisku Power BI.</span></p>
                             </div>
                             <a href="files/certyfikatPBI.pdf" target="_blank" class="btn btn-outline-primary rounded-pill w-100">
-                                <i class="bi bi-download me-2"></i>Pobierz PDF
+                                <i class="bi bi-download me-2"></i><span data-i18n="cert.dl">Pobierz PDF</span>
                             </a>
                         </div>
                     </div>
@@ -631,10 +863,10 @@ przyswajania wiedzy.</span>
                             <div>
                                 <i class="bi bi-bar-chart-fill display-4 text-primary mb-3 d-block"></i>
                                 <h4 class="h5 text-white mb-2">Microsoft Excel</h4>
-                                <p class="text-muted small mb-4">Ukończony kurs Microsoft Excel Biznes na poziomie średnio zaawansowanym w firmie PMSOCHO.</p>
+                                <p class="text-muted small mb-4"><span data-i18n="cert.xls">Ukończony kurs Microsoft Excel Biznes na poziomie średnio zaawansowanym w firmie PMSOCHO.</span></p>
                             </div>
                             <a href="files/certyfikatXSL.pdf" target="_blank" class="btn btn-outline-primary rounded-pill w-100">
-                                <i class="bi bi-download me-2"></i>Pobierz PDF
+                                <i class="bi bi-download me-2"></i><span data-i18n="cert.dl">Pobierz PDF</span>
                             </a>
                         </div>
                     </div>
@@ -646,8 +878,8 @@ przyswajania wiedzy.</span>
         <section id="tools" class="bg-opacity-10 bg-secondary">
             <div class="container">
                 <div class="text-center mb-5" data-aos="fade-up">
-                    <h2 class="fw-bold">Stack Technologiczny</h2>
-                    <p class="text-muted">Narzędzia, które wspierają moją pracę.</p>
+                    <h2 class="fw-bold"><span data-i18n="tools.title">Stack Technologiczny</span></h2>
+                    <p class="text-muted"><span data-i18n="tools.sub">Narzędzia, które wspierają moją pracę.</span></p>
                 </div>
                 
                 <div class="row g-3 justify-content-center">
@@ -665,7 +897,7 @@ przyswajania wiedzy.</span>
                             <i class="bi bi-camera tech-icon"></i>
                             <div>
                                 <h5 class="m-0 text-white">Adobe Photoshop</h5>
-                                <small class="text-muted">Zaawansowana edycja</small>
+                                <small class="text-muted"><span data-i18n="tools.photoshop">Zaawansowana edycja</span></small>
                             </div>
                         </div>
                     </div>
@@ -683,26 +915,26 @@ przyswajania wiedzy.</span>
                             <i class="bi bi-vector-pen tech-icon"></i>
                             <div>
                                 <h5 class="m-0 text-white">Corel Draw</h5>
-                                <small class="text-muted">Grafika wektorowa</small>
+                                <small class="text-muted"><span data-i18n="tools.corel">Grafika wektorowa</span></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
     <div class="tech-item">
-        <i class="bi bi-phone tech-icon"></i>
+        <svg class="tech-icon" width="1.5rem" height="1.5rem" viewBox="-6 -1 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" style="flex-shrink:0" aria-hidden="true"><path d="M10 0H5a5 5 0 0 0 0 10h5z"/><path d="M10 0h5a5 5 0 0 1 0 10h-5z"/><path d="M10 10H5a5 5 0 0 0 0 10h5z"/><circle cx="15" cy="15" r="5"/><path d="M10 20H5a5 5 0 1 0 5 5z"/></svg>
         <div>
-            <h5 class="m-0 text-white">UI/UX Basics</h5>
-            <small class="text-muted">Prototypowanie</small>
+            <h5 class="m-0 text-white">Figma</h5>
+            <small class="text-muted"><span data-i18n="tools.figma">Projektowanie interfejsów</span></small>
         </div>
     </div>
 </div>
 
 <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="350">
     <div class="tech-item">
-        <i class="bi bi-bar-chart-fill tech-icon"></i>
+        <i class="bi bi-file-earmark-spreadsheet tech-icon"></i>
         <div>
-            <h5 class="m-0 text-white">Power BI</h5>
-            <small class="text-muted">Analiza danych</small>
+            <h5 class="m-0 text-white">Excel</h5>
+            <small class="text-muted"><span data-i18n="tools.excel">Analiza danych</span></small>
         </div>
     </div>
 </div>
@@ -710,64 +942,6 @@ przyswajania wiedzy.</span>
             </div>
         </section>
 
-        <section id="projects">
-            <div class="container">
-                <div class="section-header" data-aos="fade-right">
-                    <h2>Wybrane <span class="text-primary">Projekty</span></h2>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-lg-8" data-aos="fade-up">
-                        <div class="project-card project-featured">
-                            <div class="project-img-wrapper">
-                                <i class="bi bi-easel"></i>
-                            </div>
-                            <div class="project-overlay">
-                                <h3 class="h4 text-white">Grafiki KS Witolin Warszawa</h3>
-                                <p class="text-muted mb-0">Kompleksowa identyfikacja wizualna na potrzeby social media klubu piłkarskiego.</p>
-                                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#projectModal2"></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                         <div class="project-card">
-                            <div class="project-img-wrapper">
-                                <i class="bi bi-coin"></i>
-                            </div>
-                            <div class="project-overlay">
-                                <h4 class="h5 text-white">Numizmatyka</h4>
-                                <p class="text-muted mb-0">Edycja zdjęć monet na potrzeby prezentacji produktowej na stronie sklepu internetowego – obejmująca dodanie realistycznego cienia, odbicia oraz precyzyjne opracowanie krawędzi (rantu) monety.</p>
-                                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#projectModal1"></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                        <div class="project-card">
-                            <div class="project-img-wrapper">
-                                <i class="bi bi-phone"></i>
-                            </div>
-                            <div class="project-overlay">
-                                <h4 class="h5 text-white">App UI/UX</h4>
-                                <p class="text-muted mb-0">Mockupy aplikacji mobilnych zrobione w ramach projektów na studia.</p>
-                                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#projectModal4"></a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="300">
-                        <div class="project-card d-flex align-items-center justify-content-center bg-primary text-dark p-5 text-center h-100">
-                            <div>
-                                <h3 class="fw-bold">Więcej na Behance</h3>
-                                <p class="mb-4 text-dark fw-bold">Zobacz moje pełne portfolio graficzne.</p>
-                                <a href="https://www.behance.net/janekgalewicz" target="_blank" class="btn btn-dark text-white rounded-pill stretched-link">Otwórz Behance</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section id="contact" class="pb-0">
     <div class="container mb-5">
@@ -775,10 +949,10 @@ przyswajania wiedzy.</span>
             <div class="row g-5 align-items-center">
                 
                 <div class="col-lg-5 text-center text-lg-start">
-                    <h2 class="display-5 fw-bold mb-3">Stwórzmy coś razem</h2>
+                    <h2 class="display-5 fw-bold mb-3"><span data-i18n="contact.title">Stwórzmy coś razem</span></h2>
                     <p class="lead text-muted mb-4">
-                        Masz projekt? Szukasz wsparcia w marketingu lub social media? 
-                        Napisz do mnie – chętnie porozmawiam o szczegółach.
+                        <span data-i18n="contact.lead">Masz projekt? Szukasz wsparcia w marketingu lub social media? 
+                        Napisz do mnie – chętnie porozmawiam o szczegółach.</span>
                     </p>
                     
                     <div class="d-flex flex-column gap-3">
@@ -793,7 +967,7 @@ przyswajania wiedzy.</span>
                         <div class="p-3 border border-secondary rounded-3 contact-icon-wrapper d-flex align-items-center gap-3 bg-dark bg-opacity-25">
                             <i class="bi bi-telephone fs-3 text-primary"></i>
                             <div class="text-start">
-                                <h6 class="text-white m-0">Telefon</h6>
+                                <h6 class="text-white m-0"><span data-i18n="contact.phone">Telefon</span></h6>
                                 <span class="text-muted small">+48 726 179 324</span>
                             </div>
                         </div>
@@ -801,26 +975,27 @@ przyswajania wiedzy.</span>
                 </div>
 
                 <div class="col-lg-7">
-                    <form action="https://formspree.io/f/xldvkndn" method="POST">
+                    <form id="contact-form" action="https://formspree.io/f/xldvkndn" method="POST">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <input type="text" name="imie" class="form-control form-control-custom" placeholder="Twoje imię" required>
+                                <input type="text" name="imie" class="form-control form-control-custom" placeholder="Twoje imię" data-i18n-placeholder="form.name" required>
                             </div>
                             <div class="col-md-6">
-                                <input type="email" name="email" class="form-control form-control-custom" placeholder="Twój email" required>
+                                <input type="email" name="email" class="form-control form-control-custom" placeholder="Twój email" data-i18n-placeholder="form.email" required>
                             </div>
                             <div class="col-12">
-                                <input type="text" name="temat" class="form-control form-control-custom" placeholder="Temat wiadomości">
+                                <input type="text" name="temat" class="form-control form-control-custom" placeholder="Temat wiadomości" data-i18n-placeholder="form.subject">
                             </div>
                             <div class="col-12">
-                                <textarea name="wiadomosc" class="form-control form-control-custom" rows="5" placeholder="Treść wiadomości..." required></textarea>
+                                <textarea name="wiadomosc" class="form-control form-control-custom" rows="5" placeholder="Treść wiadomości..." data-i18n-placeholder="form.message" required></textarea>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary btn-send rounded-pill">
-                                    <i class="bi bi-send-fill me-2"></i> Wyślij Wiadomość
+                                    <i class="bi bi-send-fill me-2"></i> <span data-i18n="form.send">Wyślij Wiadomość</span>
                                 </button>
                             </div>
-                        </div>
+                            </div>
+                        <div id="form-status" role="status" aria-live="polite"></div>
                     </form>
                 </div>
                 
@@ -832,106 +1007,11 @@ przyswajania wiedzy.</span>
 
     <footer id="footer" class="py-4 border-top border-secondary mt-5">
         <div class="container text-center text-muted">
-            <small>&copy; 2025 Jan Galewicz. Designed with <i class="bi bi-heart-fill text-danger"></i> & Bootstrap.</small>
+            <small>&copy; <span id="year">2025</span> Jan Galewicz. Designed with <i class="bi bi-heart-fill text-danger"></i> & Bootstrap.</small>
         </div>
     </footer>
 
-    <div class="modal fade" id="projectModal1" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content" style="background-color: #1a1a1a; border: 1px solid #333;">
-          <div class="modal-header border-0">
-            <h5 class="modal-title">Projekty monet</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="carouselModal1" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="img/Kanada52018R.jpg" class="d-block w-100 rounded carousel-image-fixed" alt="Projekt monety 1">
-                </div>
-                <div class="carousel-item">
-                    <img src="img/100rocznicaToprA.jpg" class="d-block w-100 rounded carousel-image-fixed" alt="Projekt monety 2">
-                </div>
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal1" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselModal1" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="modal fade" id="projectModal2" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content" style="background-color: #1a1a1a; border: 1px solid #333;">
-          <div class="modal-header border-0">
-            <h5 class="modal-title">Grafiki meczowe</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="carouselModal2" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="img/VAMOS WITOLIN.png" class="d-block w-100 rounded carousel-image-fixed" alt="Grafika 1">
-                </div>
-                <div class="carousel-item">
-                  <img src="img/MATCH (2).png" class="d-block w-100 rounded carousel-image-fixed" alt="Grafika 2">
-                </div>
-                <div class="carousel-item">
-  <img src="img/MATCH (3).png" class="d-block w-100 rounded carousel-image-fixed" alt="Opis">
-</div>
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal2" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselModal2" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="projectModal4" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content" style="background-color: #1a1a1a; border: 1px solid #333;">
-            <div class="modal-header border-0">
-              <h5 class="modal-title">Mockupy Aplikacji</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div id="carouselModal4" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img src="img/DF1.png" class="d-block w-100 rounded carousel-image-fixed" alt="App 1">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="img/DF3.png" class="d-block w-100 rounded carousel-image-fixed" alt="App 2">
-                  </div>
-                  <div class="carousel-item">
-  <img src="img/DF6.png" class="d-block w-100 rounded carousel-image-fixed" alt="Opis">
-</div>
-<div class="carousel-item">
-  <img src="img/NB2.png" class="d-block w-100 rounded carousel-image-fixed" alt="Opis">
-</div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal4" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselModal4" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <button id="to-top" type="button" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -1026,6 +1106,287 @@ przyswajania wiedzy.</span>
             init();
             animate();
         });
+    </script>
+
+
+    <script>
+        // ----------------------------------------------
+        // Przełącznik języka PL / EN
+        // ----------------------------------------------
+        const translations = {
+        "pl": {
+                "nav.about": "O Mnie",
+                "nav.experience": "Doświadczenie",
+                "nav.skills": "Kompetencje",
+                "nav.projects": "Portfolio",
+                "about.title": "O Mnie",
+                "exp.title": "Ścieżka<br>Kariery",
+                "proj.title": "Portfolio",
+                "hero.lead": "Marketing cyfrowy, dane i design w jednym miejscu. Łączę kreatywność z analizą, żeby komunikacja nie tylko dobrze wyglądała, ale też <span class=\"text-primary fw-bold\">działała</span>.",
+                "hero.work": "Zobacz Prace",
+                "nav.contact": "Kontakt",
+                "about.degree": "Absolwent Zarządzania ze specjalnością Digital Marketing na Uniwersytecie Civitas.",
+                "about.interests": "Pasje:",
+                "about.i1": "Gry/Technologia",
+                "about.i2": "Podróże",
+                "about.i3": "Kino",
+                "about.i4": "Sport",
+                "about.exp": "Mam doświadczenie agencyjne w domu mediowym oraz duże doświadczenie w sprzedaży, które nauczyło mnie skutecznego budowania relacji z klientami.",
+                "about.now": "Obecnie rozwijam media społecznościowe klubu KS Witolin Warszawa.",
+                "about.t1": "Myślę analitycznie i wyciągam wnioski z danych liczbowych",
+                "about.t2": "Podchodzę z zaangażowaniem do powierzonych mi zadań oraz biorę za nie odpowiedzialność.",
+                "about.t3": "Potrafię radzić sobie w stresujących sytuacjach",
+                "about.t4": "Jestem otwarty na nowe wyzwania i mam zdolność szybkiego przyswajania wiedzy.",
+                "exp.sub": "Moje doświadczenie zawodowe rok po roku.",
+                "exp.cv": "Pobierz CV",
+                "exp.1a": "Wsparcie zespołu w optymalizacji planów i kontakcie z domami mediowymi/wydawcami",
+                "exp.1b": "Przygotowywanie cyklicznych raportów o nowych kreacjach i strategii konkurencji",
+                "exp.1c": "Opracowywanie raportów post-buy i weryfikacja KPI",
+                "exp.2date": "07/2025 – Obecnie",
+                "exp.2title": "Specjalista ds. social media",
+                "exp.2a": "Kompleksowe zarządzanie wizerunkiem klubu",
+                "exp.2b": "Tworzenie contentu wideo i graficznego",
+                "exp.2c": "Harmonogramowanie postów w Meta Business Suite",
+                "exp.3title": "Specjalista ds. sprzedaży",
+                "exp.3a": "Aktywna obsługa klienta",
+                "exp.3b": "Realizacja targetów sprzedażowych",
+                "exp.3c": "Projektowanie nadruków odzieżowych w Corel Draw",
+                "exp.4title": "Asystent ds. contentu",
+                "exp.4a": "Tworzenie kart produktowych (Excel)",
+                "exp.4b": "Obróbka zdjęć (Photoshop)",
+                "exp.4c": "Współpraca z działem marketingu",
+                "cert.title": "Certyfikaty",
+                "cert.sub": "Dokumenty potwierdzające moje umiejętności i ukończone kursy.",
+                "cert.pbi": "Ukończony kurs Santander Open Academy z zakresu analizy danych i tworzenia wizualizacji w środowisku Power BI.",
+                "cert.xls": "Ukończony kurs Microsoft Excel Biznes na poziomie średnio zaawansowanym w firmie PMSOCHO.",
+                "cert.dl": "Pobierz PDF",
+                "tools.title": "Stack Technologiczny",
+                "tools.sub": "Narzędzia, które wspierają moją pracę.",
+                "tools.photoshop": "Zaawansowana edycja",
+                "tools.corel": "Grafika wektorowa",
+                "tools.figma": "Projektowanie interfejsów",
+                "tools.excel": "Analiza danych",
+                "proj.1title": "Grafiki KS Witolin Warszawa",
+                "proj.1desc": "Kompleksowa identyfikacja wizualna na potrzeby social media klubu piłkarskiego.",
+                "proj.2title": "Numizmatyka",
+                "proj.2desc": "Edycja zdjęć monet na potrzeby prezentacji produktowej na stronie sklepu internetowego – obejmująca dodanie realistycznego cienia, odbicia oraz precyzyjne opracowanie krawędzi (rantu) monety.",
+                "proj.3desc": "Mockupy aplikacji mobilnych zrobione w ramach projektów na studia.",
+                "proj.more": "Więcej na Behance",
+                "proj.moresub": "Zobacz moje pełne portfolio graficzne.",
+                "proj.open": "Otwórz Behance",
+                "proj.sub": "Grafiki i projekty, nad którymi pracowałem.",
+                "proj.view": "Zobacz projekt",
+                "proj.tag.social": "Social media",
+                "proj.tag.brand": "Identyfikacja wizualna",
+                "proj.tag.retouch": "Retusz zdjęć",
+                "proj.tag.ecom": "E-commerce",
+                "contact.title": "Stwórzmy coś razem",
+                "contact.lead": "Masz projekt? Szukasz wsparcia w marketingu lub social media? Napisz do mnie – chętnie porozmawiam o szczegółach.",
+                "contact.phone": "Telefon",
+                "form.name": "Twoje imię",
+                "form.email": "Twój email",
+                "form.subject": "Temat wiadomości",
+                "form.message": "Treść wiadomości...",
+                "form.send": "Wyślij Wiadomość",
+                "form.sending": "Wysyłanie...",
+                "form.ok": "Dziękuję! Wiadomość została wysłana – odezwę się wkrótce.",
+                "form.err": "Coś poszło nie tak. Spróbuj ponownie lub napisz na jan.galewicz@gmail.com.",
+                "m1.title": "Projekty monet",
+                "m2.title": "Grafiki meczowe",
+                "m4.title": "Mockupy Aplikacji",
+                "alt.coin1": "Projekt monety 1",
+                "alt.coin2": "Projekt monety 2",
+                "alt.gfx1": "Grafika 1",
+                "alt.gfx2": "Grafika 2",
+                "page.title": "Jan Galewicz - Specjalista ds. Marketingu i Social Media"
+        },
+        "en": {
+                "nav.about": "About Me",
+                "nav.experience": "Experience",
+                "nav.skills": "Skills",
+                "nav.projects": "Portfolio",
+                "about.title": "About Me",
+                "exp.title": "Career<br>Path",
+                "proj.title": "Portfolio",
+                "hero.lead": "Digital marketing, data and design in one place. I combine creativity with analysis, so communication doesn't just look good, <span class=\"text-primary fw-bold\">it works</span>.",
+                "hero.work": "See My Work",
+                "nav.contact": "Contact",
+                "about.degree": "Graduate in Management, specializing in Digital Marketing, from Civitas University.",
+                "about.interests": "Interests:",
+                "about.i1": "Games/Technology",
+                "about.i2": "Travel",
+                "about.i3": "Cinema",
+                "about.i4": "Sports",
+                "about.exp": "I have agency experience at a media house and extensive sales experience, which taught me how to build effective client relationships.",
+                "about.now": "I am currently growing the social media of the KS Witolin Warszawa football club.",
+                "about.t1": "I think analytically and draw conclusions from numerical data",
+                "about.t2": "I approach my tasks with commitment and take responsibility for them.",
+                "about.t3": "I can handle stressful situations",
+                "about.t4": "I am open to new challenges and quick to pick up new knowledge.",
+                "exp.sub": "My professional experience, year by year.",
+                "exp.cv": "Download CV",
+                "exp.1a": "Supporting the team in optimizing media plans and liaising with media agencies and publishers",
+                "exp.1b": "Preparing recurring reports on new creatives and competitor strategy",
+                "exp.1c": "Preparing post-buy reports and verifying KPIs",
+                "exp.2date": "07/2025 – Present",
+                "exp.2title": "Social Media Specialist",
+                "exp.2a": "Full management of the club's image",
+                "exp.2b": "Creating video and graphic content",
+                "exp.2c": "Scheduling posts in Meta Business Suite",
+                "exp.3title": "Sales Specialist",
+                "exp.3a": "Proactive customer service",
+                "exp.3b": "Meeting sales targets",
+                "exp.3c": "Designing clothing prints in Corel Draw",
+                "exp.4title": "Content Assistant",
+                "exp.4a": "Creating product cards (Excel)",
+                "exp.4b": "Photo editing (Photoshop)",
+                "exp.4c": "Collaboration with the marketing department",
+                "cert.title": "Certificates",
+                "cert.sub": "Documents confirming my skills and completed courses.",
+                "cert.pbi": "Completed the Santander Open Academy course on data analysis and building visualizations in Power BI.",
+                "cert.xls": "Completed the Microsoft Excel Business course (intermediate level) at PMSOCHO.",
+                "cert.dl": "Download PDF",
+                "tools.title": "Tech Stack",
+                "tools.sub": "Tools that support my work.",
+                "tools.photoshop": "Advanced editing",
+                "tools.corel": "Vector graphics",
+                "tools.figma": "Interface design",
+                "tools.excel": "Data analysis",
+                "proj.1title": "KS Witolin Warszawa Graphics",
+                "proj.1desc": "Complete visual identity for a football club's social media.",
+                "proj.2title": "Numismatics",
+                "proj.2desc": "Editing coin photos for product presentation in an online store – including adding a realistic shadow and reflection and precisely retouching the edge of the coin.",
+                "proj.3desc": "Mobile app mockups created as part of university projects.",
+                "proj.more": "More on Behance",
+                "proj.moresub": "See my full graphic portfolio.",
+                "proj.open": "Open Behance",
+                "proj.sub": "Graphics and projects I have worked on.",
+                "proj.view": "View project",
+                "proj.tag.social": "Social media",
+                "proj.tag.brand": "Visual identity",
+                "proj.tag.retouch": "Photo retouching",
+                "proj.tag.ecom": "E-commerce",
+                "contact.title": "Let's Create Something Together",
+                "contact.lead": "Got a project? Looking for marketing or social media support? Drop me a line – I'd be happy to talk through the details.",
+                "contact.phone": "Phone",
+                "form.name": "Your name",
+                "form.email": "Your email",
+                "form.subject": "Message subject",
+                "form.message": "Your message...",
+                "form.send": "Send Message",
+                "form.sending": "Sending...",
+                "form.ok": "Thank you! Your message has been sent – I'll get back to you soon.",
+                "form.err": "Something went wrong. Please try again or email jan.galewicz@gmail.com.",
+                "m1.title": "Coin Projects",
+                "m2.title": "Matchday Graphics",
+                "m4.title": "App Mockups",
+                "alt.coin1": "Coin project 1",
+                "alt.coin2": "Coin project 2",
+                "alt.gfx1": "Graphic 1",
+                "alt.gfx2": "Graphic 2",
+                "page.title": "Jan Galewicz - Marketing & Social Media Specialist"
+        }
+};
+
+        // Pliki CV dla każdego języka.
+        // TODO: wgraj angielskie CV do folderu files/ i podmień ścieżkę 'en', np. 'files/_CV_JanGalewicz_EN.pdf'
+        const cvFiles = {
+            pl: 'files/_CV_JanGalewicz.pdf',
+            en: 'files/_CV_JanGalewicz.pdf'
+        };
+
+        function setLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.title = t['page.title'];
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const v = t[el.dataset.i18n]; if (v !== undefined) el.textContent = v;
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const v = t[el.dataset.i18nHtml]; if (v !== undefined) el.innerHTML = v;
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const v = t[el.dataset.i18nPlaceholder]; if (v !== undefined) el.placeholder = v;
+            });
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                const v = t[el.dataset.i18nTitle]; if (v !== undefined) el.title = v;
+            });
+            document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+                const v = t[el.dataset.i18nAlt]; if (v !== undefined) el.alt = v;
+            });
+
+            const cv = document.getElementById('cv-link');
+            if (cv) cv.href = cvFiles[lang];
+
+            // przycisk pokazuje język, na który można przełączyć
+            document.getElementById('lang-toggle').textContent = lang === 'pl' ? 'EN' : 'PL';
+
+            try { localStorage.setItem('lang', lang); } catch (e) {}
+            if (window.AOS) AOS.refresh();
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            setLang(document.documentElement.lang === 'pl' ? 'en' : 'pl');
+        });
+
+        // zapamiętany wybór; domyślnie polski (żeby domyślnie wykrywać język przeglądarki,
+        // zamień 'pl' na: (navigator.language || '').startsWith('pl') ? 'pl' : 'en')
+        let savedLang = null;
+        try { savedLang = localStorage.getItem('lang'); } catch (e) {}
+        setLang(savedLang === 'en' ? 'en' : 'pl');
+    </script>
+
+
+    <script>
+        // ----------------------------------------------
+        // Ulepszenia: pasek postępu, przycisk "do góry", rok, formularz AJAX
+        // ----------------------------------------------
+        (function () {
+            const bar = document.getElementById('scroll-progress');
+            const toTop = document.getElementById('to-top');
+
+            function onScroll() {
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+                toTop.classList.toggle('show', window.scrollY > 600);
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            const form = document.getElementById('contact-form');
+            const status = document.getElementById('form-status');
+            const sendBtn = form.querySelector('button[type="submit"]');
+            const t = key => translations[document.documentElement.lang][key];
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                status.className = '';
+                status.textContent = t('form.sending');
+                sendBtn.disabled = true;
+                try {
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (!res.ok) throw new Error('bad response');
+                    form.reset();
+                    status.className = 'ok';
+                    status.textContent = t('form.ok');
+                } catch (err) {
+                    status.className = 'err';
+                    status.textContent = t('form.err');
+                } finally {
+                    sendBtn.disabled = false;
+                }
+            });
+        })();
     </script>
 
 </body>
